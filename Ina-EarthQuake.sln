@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ina-EarthQuake", "Ina-EarthQuake\Ina-EarthQuake.csproj", "{3DA6C032-1D39-4833-AD94-9A73CD29EB01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|ARM64.Build.0 = Debug|ARM64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|x64.ActiveCfg = Debug|x64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|x64.Build.0 = Debug|x64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|x64.Deploy.0 = Debug|x64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|x86.ActiveCfg = Debug|x86
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|x86.Build.0 = Debug|x86
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Debug|x86.Deploy.0 = Debug|x86
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|ARM64.ActiveCfg = Release|ARM64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|ARM64.Build.0 = Release|ARM64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|ARM64.Deploy.0 = Release|ARM64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|x64.ActiveCfg = Release|x64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|x64.Build.0 = Release|x64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|x64.Deploy.0 = Release|x64
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|x86.ActiveCfg = Release|x86
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|x86.Build.0 = Release|x86
+		{3DA6C032-1D39-4833-AD94-9A73CD29EB01}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4BB2266-363D-4BAF-8529-B2648F80AD4E}
+	EndGlobalSection
+EndGlobal

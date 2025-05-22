@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Ina_EarthQuake.Views.SafetyInfoPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Ina_EarthQuake.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:ui="using:CommunityToolkit.WinUI"
+    mc:Ignorable="d"
+    Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}">
+
+    <ScrollView>
+        <Grid MaxWidth="1000" Margin="24,24,24,24">
+            <StackPanel>
+                <StackPanel Margin="0,20,0,20">
+                    <TextBlock Text="Informasi Keselamatan"
+                           Style="{StaticResource TitleTextBlockStyle}" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                    <controls:SettingsExpander Header="Persiapan Diri untuk Mencegah Dampak Gempa Bumi"
+                                               Description="Hal-hal yang harus disiapkan saat ini agar dapat meminimalkan dampak gempa bumi."
+                                               HeaderIcon="{ui:FontIcon Glyph=&#xEA18;}">
+                        <controls:SettingsExpander.Items>
+                            <controls:SettingsCard Header="Pastikan bangunan rumah dan lingkungan sekitar tahan gempa."/>
+                            <controls:SettingsCard Header="Amankan benda yang mudah jatuh dan dapat melukai diri kita."/>
+                            <controls:SettingsCard Header="Lakukan pelatihan dan simulasi dalam melindungi diri serta evakuasi gempa bumi."/>
+                            <controls:SettingsCard Header="Perhatikan tata letak ruangan, seperti pintu, tangga darurat, dan tempat aman."/>
+                        </controls:SettingsExpander.Items>
+                    </controls:SettingsExpander>
+                    <controls:SettingsExpander Header="Tindakan Ketika Gempa Bumi Terjadi"
+                           Description="Hal-hal yang harus dilakukan ketika gempa bumi berlangsung."
+                           HeaderIcon="{ui:FontIcon Glyph=&#xE776;}">
+                        <controls:SettingsExpander.Items>
+                            <controls:SettingsCard Header="Saat terjadi guncangan gempa, lakukan berlutut, berlindung, dan bertahan."/>
+                            <controls:SettingsCard Header="Jika sedang berada di dalam lift, jangan panik dan tekan tombol darurat."/>
+                            <controls:SettingsCard Header="Bila ada meja atau kursi yang kuat, silahkan berlindung di bawah nya."/>
+                            <controls:SettingsCard Header="Bagi pengguna kursi roda, kunci kursi roda dan lindungi kepala."/>
+                            <controls:SettingsCard Header="Jauhi kaca, bangunan bertingkat, pohon tinggi, papan reklame, dan tiang listrik."/>
+                            <controls:SettingsCard Header="Hindari jembatan dan terowongan."/>
+                            <controls:SettingsCard Header="Jika sedang berkendara, pinggirkan mobil ke tempat aman dan tetap berada di dalam kendaraan."/>
+                        </controls:SettingsExpander.Items>
+                    </controls:SettingsExpander>
+                    <controls:SettingsExpander Header="Tindakan Ketika Sesudah Terjadi Gempa"
+                           Description="Hal-hal yang harus dilakukan ketika guncangan gempa telah usai."
+                           HeaderIcon="{ui:FontIcon Glyph=&#xE805;}">
+                        <controls:SettingsExpander.Items>
+                            <controls:SettingsCard Header="Segera ke tempat terbuka yang aman (titik kumpul)."/>
+                            <controls:SettingsCard Header="Tetap lindungi kepala anda saat melakukan evakuasi."/>
+                            <controls:SettingsCard Header="Bila sedang di gedung bertingkat, jangan gunakan lift namun gunakan tangga darurat."/>
+                            <controls:SettingsCard Header="Tetap siaga dan hati-hati saat kembali memasuki rumah atau gedung."/>
+                            <controls:SettingsCard Header="Waspada terhadap kebakaran pasca gempa."/>
+                            <controls:SettingsCard Header="Perbaiki segera kerusakan listrik, gas, atau bangunan."/>
+                            <controls:SettingsCard Header="Jika terperangkap, gunakan peluit atau mengetuk pipa."/>
+                        </controls:SettingsExpander.Items>
+                    </controls:SettingsExpander>
+                </StackPanel>
+                <TextBlock Text="Informasi Keselamatan ini diambil dari infografis yang disediakan oleh Badan Nasional Penanggulangan Bencana Indonesia."
+                           Margin="0,20,0,20"
+                           Style="{StaticResource BodyTextBlockStyle}"/>
+            </StackPanel>
+        </Grid>
+     </ScrollView>
+</Page>

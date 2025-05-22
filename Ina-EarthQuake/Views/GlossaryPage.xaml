@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Ina_EarthQuake.Views.GlossaryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Ina_EarthQuake.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:ui="using:CommunityToolkit.WinUI"
+    mc:Ignorable="d"
+    Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}">
+    <ScrollView>
+        <Grid MaxWidth="1000" Margin="24,24,24,24">
+            <StackPanel>
+                <StackPanel Margin="0,20,0,20">
+                    <TextBlock Text="Glosarium"
+                               Style="{StaticResource TitleTextBlockStyle}" />
+                </StackPanel>
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Istilah Seismologi dan Gempa" FontWeight="Bold" FontSize="16" Margin="0,0,0,8"/>
+                    <controls:SettingsCard Header="Magnitude"
+                                           Description="Ukuran kekuatan gempa berdasarkan energi yang dilepaskan."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xE93E;}"/>
+                    <controls:SettingsCard Header="Skala MMI (Modified Mercalli Intensity)"
+                                           Description="Skala untuk mengukur dampak gempa berdasarkan intensitas guncangan yang dirasakan manusia."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xE9D2;}"/>
+                    <controls:SettingsCard Header="Epicenter (Episentrum)"
+                                           Description="Titik di permukaan bumi yang berada tepat di atas pusat gempa di bawah tanah."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xECAF;}"/>
+                    <controls:SettingsCard Header="Hypocenter (Hiposentrum)"
+                                           Description="Titik sumber gempa di dalam bumi."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xE81D;}"/>
+                    <controls:SettingsCard Header="Liquefaction (Likuefaksi)"
+                                           Description="Fenomena di mana tanah kehilangan kekuatan akibat gempa, sering menyebabkan bangunan tenggelam atau runtuh."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xEF42;}"/>
+                    <controls:SettingsCard Header="Aftershock (Gempa Susulan)"
+                                           Description="Gempa kecil yang terjadi setelah gempa utama."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xF61F;}"/>
+                    <controls:SettingsCard Header="Tsunami"
+                                           Description="Gelombang besar di laut yang dihasilkan oleh gempa bawah laut."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xEDA8;}"/>
+                </StackPanel>
+                <StackPanel Margin="0,16,0,0" Spacing="4">
+                    <TextBlock Text="Istilah Geografis dan Peta" FontWeight="Bold" FontSize="16" Margin="0,0,0,8"/>
+                    <controls:SettingsCard Header="Latitude dan Longitude (Lintang dan Bujur)"
+                                   Description="Koordinat geografis untuk menentukan lokasi suatu tempat."
+                                   HeaderIcon="{ui:FontIcon Glyph=&#xE707;}"/>
+                    <controls:SettingsCard Header="Sesar (Fault Line)"
+                                   Description="Retakan di kerak bumi tempat gempa sering terjadi."
+                                   HeaderIcon="{ui:FontIcon Glyph=&#xE730;}"/>
+                    <controls:SettingsCard Header="Zona Subduksi"
+                                   Description="Area di mana lempeng tektonik bertabrakan, sering menjadi sumber gempa besar."
+                                   HeaderIcon="{ui:FontIcon Glyph=&#xE73F;}"/>
+                    <controls:SettingsCard Header="Peta Shakemap"
+                                   Description="Peta yang menunjukkan tingkat guncangan gempa di berbagai daerah."
+                                   HeaderIcon="{ui:FontIcon Glyph=&#xE826;}"/>
+                </StackPanel>
+                <StackPanel Margin="0,16,0,0" Spacing="4">
+                    <TextBlock Text="Istilah Darurat dan Mitigasi" FontWeight="Bold" FontSize="16" Margin="0,0,0,8"/>
+                    <controls:SettingsCard Header="Evakuasi"
+                                           Description="Tindakan untuk menyelamatkan diri dari daerah terdampak gempa."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xE805;}"/>
+                    <controls:SettingsCard Header="Peringatan Dini Tsunami"
+                                           Description="Sistem yang memberi tahu masyarakat saat ada potensi tsunami setelah gempa."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xE789;}"/>
+                    <controls:SettingsCard Header="Zona Risiko Gempa"
+                                           Description="Area yang sering terkena gempa berdasarkan sejarah seismik."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xE7BA;}"/>
+                </StackPanel>
+                <StackPanel Margin="0,16,0,0" Spacing="4">
+                    <TextBlock Text="Istilah Data dan Teknologi" FontWeight="Bold" FontSize="16" Margin="0,0,0,8"/>
+                    <controls:SettingsCard Header="Open Data BMKG"
+                               Description="Akses data dari BMKG terkait informasi dan data gempa bumi terkini."
+                               HeaderIcon="{ui:FontIcon Glyph=&#xEDE4;}"/>
+                    <controls:SettingsCard Header="BMKG"
+                                           Description="Badan Meteorologi Klimatologi dan Geofisika."
+                                           HeaderIcon="{ui:FontIcon Glyph=&#xE731;}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollView>
+</Page>

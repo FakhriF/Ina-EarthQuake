@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Ina-EarthQuake (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Ina-EarthQuake (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
