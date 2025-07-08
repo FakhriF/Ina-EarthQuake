@@ -58,7 +58,7 @@
                                    Description="2025 © All Rights Reserved"
                                    HeaderIcon="{ui:BitmapIcon Source=ms-appx:///Assets/Square44x44Logo.scale-200.png}"
                                    >
-                <TextBlock Text="Version 1.0.5.0"/>
+                <TextBlock Text="Version 1.0.3.0"/>
             </controls:SettingsCard>
         </StackPanel>
     </Grid>
