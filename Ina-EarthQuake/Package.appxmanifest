@@ -10,7 +10,7 @@
   <Identity
     Name="fa455812-ee71-4575-bb78-f66fff5d0c50"
     Publisher="CN=Ina-EarthQuake"
-    Version="1.0.2.0" />
+    Version="1.0.3.0" />
 
   <mp:PhoneIdentity PhoneProductId="fa455812-ee71-4575-bb78-f66fff5d0c50" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

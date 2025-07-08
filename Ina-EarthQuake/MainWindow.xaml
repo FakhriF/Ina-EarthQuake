@@ -22,12 +22,12 @@
         </Grid.RowDefinitions>
         <Grid x:Name="AppTitleBar" Margin="16,0,0,0">
             <StackPanel Orientation="Horizontal">
-                <Image Source="/Assets/SmallTile.png" Height="16"/>
+                <Image Source="/Assets/Square44x44Logo.scale-400.png" Height="24"/>
                 <TextBlock x:Name="AppTitleTextBlock" Text="Ina-EarthQuake"
                            TextWrapping="NoWrap"
                            Style="{StaticResource CaptionTextBlockStyle}" 
                            VerticalAlignment="Center"
-                           Margin="20,0,0,0"/>
+                           Margin="10,0,0,0"/>
             </StackPanel>
         </Grid>
         <NavigationView x:Name="Nav" Grid.Row="1" CompactModeThresholdWidth="0" BackRequested="Nav_BackRequested">
