@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,89 +11,73 @@ namespace Ina_EarthQuake.Services
 {
     public class EarthquakeService
     {
-        private static readonly HttpClient client = new();
+        private readonly HttpClient _client;
+        private readonly JsonSerializerOptions _serializerOptions;
 
-        static EarthquakeService()
+        public EarthquakeService()
         {
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("Ina-EarthQuake-App/1.0");
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.UserAgent.ParseAdd("Ina-EarthQuake-App/1.0");
+            _serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
         }
 
-        public static async Task<EarthquakeInfo?> FetchEarthquakeData()
+        private async Task<T?> GetAsync<T> (string url)
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json");
+                HttpResponseMessage response = await _client.GetAsync(url);
                 response.EnsureSuccessStatusCode();
-
                 string responseBody = await response.Content.ReadAsStringAsync();
-                using JsonDocument jsonDocument = JsonDocument.Parse(responseBody);
-                var gempa = jsonDocument.RootElement.GetProperty("Infogempa").GetProperty("gempa");
-
-                return new EarthquakeInfo
-                {
-                    Datetime = gempa.GetProperty("DateTime").GetString() ?? "No Data",
-                    Tanggal = gempa.GetProperty("Tanggal").GetString() ?? "No Data",
-                    Jam = gempa.GetProperty("Jam").GetString() ?? "No Data",
-                    Magnitude = gempa.GetProperty("Magnitude").GetString() ?? "No Data",
-                    Kedalaman = gempa.GetProperty("Kedalaman").GetString() ?? "No Data",
-                    Wilayah = gempa.GetProperty("Wilayah").GetString() ?? "No Data",
-                    Lintang = gempa.GetProperty("Lintang").GetString() ?? "No Data",
-                    Bujur = gempa.GetProperty("Bujur").GetString() ?? "No Data",
-                    Potensi = gempa.GetProperty("Potensi").GetString() ?? "No Data",
-                    Dirasakan = gempa.GetProperty("Dirasakan").GetString() ?? "No Data",
-                    Shakemap = gempa.GetProperty("Shakemap").GetString() ?? "No Data"
-                };
+                return JsonSerializer.Deserialize<T>(responseBody, _serializerOptions);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Fetch Error: " + ex.ToString());
-                return null;
+                Debug.WriteLine($"[ERROR] Failed to fetch or parse {url}: {ex.Message}");
+                return default;
             }
         }
 
-        public static async Task<List<EarthquakeInfo>?> FetchEarthquakeHistory()
+        public async Task<EarthquakeInfo?> FetchLatestEarthquakeAsync()
         {
-            try
+            var result = await GetAsync<BmkgInfoGempa<AutoGempa>>("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json");
+            return result?.InfoGempa?.Gempa;
+        }
+
+        public async Task<List<EarthquakeInfo>?> FetchEarthquakeHistoryAsync()
+        {
+            var feltTask= GetAsync<BmkgInfoGempa<GempaHistory>>("https://data.bmkg.go.id/DataMKG/TEWS/gempadirasakan.json");
+            var recentTask = GetAsync<BmkgInfoGempa<GempaHistory>>("https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json");
+
+            await Task.WhenAll(feltTask, recentTask);
+
+            var feltEarthquakes = feltTask.Result?.InfoGempa?.Gempa ?? new List<EarthquakeInfo>();
+            var recentEarthquakes = recentTask.Result?.InfoGempa?.Gempa ?? new List<EarthquakeInfo>();
+
+            //Menyatukan data felt dan recent
+            var combineQuakes = new Dictionary<string, EarthquakeInfo>();
+
+            foreach(var quake in feltEarthquakes)
             {
-                HttpResponseMessage response = await client.GetAsync("https://data.bmkg.go.id/DataMKG/TEWS/gempadirasakan.json");
-                response.EnsureSuccessStatusCode();
-
-                string responseBody = await response.Content.ReadAsStringAsync();
-                using JsonDocument jsonDocument = JsonDocument.Parse(responseBody);
-
-                var gempaRoot = jsonDocument.RootElement.GetProperty("Infogempa").GetProperty("gempa");
-                List<EarthquakeInfo> earthquakeList = [];
-
-                //Debug.WriteLine(gempaRoot);
-
-                // Iterasi setiap objek di dalam "gempa"
-                foreach (var data in gempaRoot.EnumerateArray())
+                if (quake.DateTime != null && !combineQuakes.ContainsKey(quake.DateTime))
                 {
-                    var gempaData = data;
-                    //Debug.WriteLine(gempaData);
-
-                    earthquakeList.Add(new EarthquakeInfo
-                    {
-                        Tanggal = gempaData.GetProperty("Tanggal").GetString() ?? "No Data",
-                        Jam = gempaData.GetProperty("Jam").GetString() ?? "No Data",
-                        Magnitude = gempaData.GetProperty("Magnitude").GetString() ?? "No Data",
-                        Kedalaman = gempaData.GetProperty("Kedalaman").GetString() ?? "No Data",
-                        Wilayah = gempaData.GetProperty("Wilayah").GetString() ?? "No Data",
-                        Lintang = gempaData.GetProperty("Lintang").GetString() ?? "No Data",
-                        Bujur = gempaData.GetProperty("Bujur").GetString() ?? "No Data",
-                        Potensi = "No Data",
-                        Dirasakan = gempaData.GetProperty("Dirasakan").GetString() ?? "No Data",
-                        Shakemap = "No Data"
-                    });
+                    combineQuakes.Add(quake.DateTime, quake);
                 }
+            }
 
-                return earthquakeList;
-            }
-            catch (Exception ex)
+            foreach (var quake in recentEarthquakes)
             {
-                Debug.WriteLine($"Error fetching data: {ex.Message}");
-                return null;
+                if (quake.DateTime != null && !combineQuakes.ContainsKey(quake.DateTime))
+                {
+                    combineQuakes.Add(quake.DateTime, quake);
+                }
             }
+
+            return combineQuakes.Values
+                .OrderByDescending(q => DateTime.Parse(q.DateTime!))
+                .ToList();
         }
     }
 }

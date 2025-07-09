@@ -7,48 +7,60 @@
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:Ina_EarthQuake.Models"
+    xmlns:models="using:Ina_EarthQuake.Models"
     mc:Ignorable="d"
     Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}">
 
     <ScrollViewer>
         <Grid>
-            <Grid HorizontalAlignment="Center">
-                <StackPanel Margin="24" MaxWidth="1000">
-                    <!-- Bagian Judul -->
-                    <StackPanel Margin="0,20,0,20">
-                        <TextBlock x:Name="PageTitle" Text="Riwayat Gempa" 
-                               Style="{StaticResource TitleTextBlockStyle}" />
-                        <TextBlock Text="Menampilkan 15 gempa yang dirasakan terakhir. Data diambil dari Open Data Kegempaan BMKG." 
-                               Style="{StaticResource CaptionTextBlockStyle}"/>
-                    </StackPanel>
+            <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Width="50" Height="50"/>
+            <StackPanel Margin="24" MaxWidth="1000" Visibility="{x:Bind (x:Boolean) ViewModel.IsLoading, Mode=OneWay}">
+                <StackPanel Margin="0,20,0,20">
+                    <TextBlock Text="Riwayat Gempa" Style="{StaticResource TitleTextBlockStyle}" />
+                    <TextBlock Text="Menampilkan beberapa gempa terakhir dari data BMKG." Style="{StaticResource CaptionTextBlockStyle}"/>
+                </StackPanel>
 
-                    <!-- Daftar Gempa -->
-                    <ItemsControl x:Name="EQHistoryListView" ItemsSource="{x:Bind EarthquakeList}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="local1:EarthquakeInfo">
-                                <Grid Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="15" CornerRadius="8"
-                                  Margin="0,0,0,8"
-                                  Tapped="EQItem_Tapped" Tag="{x:Bind}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                <ListView ItemsSource="{x:Bind ViewModel.EarthquakeList, Mode=OneWay}"
+                          IsItemClickEnabled="True"
+                          ItemClick="ListView_ItemClick">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:EarthquakeInfo">
+                            <Grid Background="Transparent" Padding="15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{x:Bind Magnitude}" FontSize="24" FontWeight="Bold" 
+                                <TextBlock Text="{x:Bind Magnitude}" FontSize="24" FontWeight="Bold" 
                                            HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Margin="10,0,20,0"/>
 
-                                    <StackPanel Orientation="Vertical" Grid.Column="1">
-                                        <TextBlock Text="{x:Bind Wilayah}" FontSize="16" FontWeight="Bold"/>
-                                        <TextBlock Text="{x:Bind Tanggal}" FontSize="12"/>
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </Grid>
+                                <StackPanel Orientation="Vertical" Grid.Column="1">
+                                    <TextBlock Text="{x:Bind Wilayah}" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock FontSize="12">
+                                        <Run Text="{x:Bind Tanggal}"/>
+                                        <Run Text="-"/>
+                                        <Run Text="{x:Bind Jam}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+                            <Setter Property="Margin" Value="0,0,0,8"/>
+                            <Setter Property="CornerRadius" Value="8"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </StackPanel>
+
         </Grid>
     </ScrollViewer>
-
 
 </Page>

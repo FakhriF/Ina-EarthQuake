@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Ina_EarthQuake.Services;
+using Ina_EarthQuake.ViewModels;
+using Microsoft.UI.Xaml.Navigation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -17,40 +19,41 @@ namespace Ina_EarthQuake.Views
     /// </summary>
     public sealed partial class EQHistoryPage : Page
     {
-        public ObservableCollection<EarthquakeInfo> EarthquakeList { get; } = [];
+        public EQHistoryViewModel ViewModel { get; }
 
         public EQHistoryPage()
         {
             this.InitializeComponent();
-            this.Loaded += async (s, e) => await UpdateData();
+
+            var earthquakeService = new EarthquakeService();
+            var navigationService = new NavigationService();
+
+            ViewModel = new EQHistoryViewModel(earthquakeService, navigationService);
         }
 
-        private async Task UpdateData()
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var earthquakeData = await EarthquakeService.FetchEarthquakeHistory();
-            if (earthquakeData != null)
-            {
-                EarthquakeList.Clear();
-                foreach (var item in earthquakeData)
-                {
-                    EarthquakeList.Add(item);
-                }
-            }
-            else
-            {
-                Debug.WriteLine("Tidak ada data gempa.");
-            }
+            base.OnNavigatedTo(e);
+            await ViewModel.LoadDataCommand.ExecuteAsync(null);
+
         }
 
-        private void EQItem_Tapped(object sender, TappedRoutedEventArgs e)
+        //private void EQItem_Tapped(object sender, TappedRoutedEventArgs e)
+        //{
+        //    if (sender is FrameworkElement fe && fe.Tag is EarthquakeInfo selectedItem)
+        //    {
+        //        Debug.WriteLine($"Selected Earthquake: {selectedItem.Tanggal} - Magnitude {selectedItem.Magnitude}");
+        //        Frame.Navigate(typeof(EQDetail), selectedItem);
+        //        //((MainWindow)Window.).MainFrame.Navigate(typeof(EQDetail), selectedItem);
+        //    }
+        //}
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (sender is FrameworkElement fe && fe.Tag is EarthquakeInfo selectedItem)
+            if (e.ClickedItem is EarthquakeInfo selectedItem)
             {
-                Debug.WriteLine($"Selected Earthquake: {selectedItem.Tanggal} - Magnitude {selectedItem.Magnitude}");
-                Frame.Navigate(typeof(EQDetail), selectedItem);
-                //((MainWindow)Window.).MainFrame.Navigate(typeof(EQDetail), selectedItem);
+                ViewModel.GoToDetailsCommand.Execute(selectedItem);
             }
         }
-
     }
 }
