@@ -7,6 +7,8 @@ using Mapsui.Tiling;
 using System.Diagnostics;
 using Ina_EarthQuake.Models;
 using Ina_EarthQuake.Services;
+using Ina_EarthQuake.ViewModels;
+using System.ComponentModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -19,86 +21,58 @@ namespace Ina_EarthQuake.Views
     /// 
     public sealed partial class HomePage : Page
     {
-        readonly DispatcherTimer timer = new();
-
-        private string shakemapCode = "";
+        public HomeViewModel ViewModel { get; }
+        private readonly IMapService _mapService;
 
         public HomePage()
         {
-            this.InitializeComponent();
-            MyMap.Map.Layers.Add(OpenStreetMap.CreateTileLayer());
+            InitializeComponent();
 
-            this.Loaded += async (s, e) => await UpdateUI();
-            timer.Interval = TimeSpan.FromMinutes(1);
-            timer.Tick += async (s, e) => await UpdateUI(); 
-            timer.Start();
+            ViewModel = new HomeViewModel();
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            MyMap.Map.Layers.Add(Mapsui.Tiling.OpenStreetMap.CreateTileLayer());
+        }
+
+        private async void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ViewModel.LatestEarthquake))
+            {
+                DispatcherQueue.TryEnqueue(async () =>
+                {
+                    await Task.Delay(100);
+
+                    UpdateMapPosition();
+                });
+            }
+        }
+
+        private void UpdateMapPosition()
+        {
+            if(ViewModel.LatestEarthquake != null)
+            {
+                var data = ViewModel.LatestEarthquake;
+                double lat = App.MapService.ParseCoordinate(data.Lintang!);
+                double lon = App.MapService.ParseCoordinate(data.Bujur!, isLatitude: false);
+
+                App.MapService.SetMapPosition(MyMap, lat, lon);
+                App.MapService.AddEarthquakeMarker(MyMap, lat, lon);
+            }
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            await ViewModel.LoadDataCommand.ExecuteAsync(null);
+
+            ViewModel.StartTimer();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            Debug.WriteLine("Sayonara!");
-            MyMap.Map.Layers.Clear();
-            timer?.Stop();  // Hentikan timer jika ada
-        }
+            base.OnNavigatedFrom(e);
 
-        private async Task UpdateUI()
-        {
-            var data = await EarthquakeService.FetchEarthquakeData();
-
-            if (data != null)
-            {
-                UpdateEarthquakeDetails(data);
-                ProcessEarthquakeData(data);
-            }
-            else
-            {
-                EarthquakeDate.Text = "Error: Unable to fetch data.";
-            }
-
-            UpdateLastUpdateInfo();
-            shakemapCode = data?.Shakemap ?? "No Data";
-            CheckShakemapAvailability();
-        }
-
-        private void UpdateEarthquakeDetails(EarthquakeInfo data)
-        {
-            EarthquakeDate.Text = data.Tanggal;
-            EarthquakeHours.Text = data.Jam;
-            EarthquakeMag.Text = data.Magnitude;
-            EarthquakeDepth.Text = data.Kedalaman;
-            EarthquakeRegion.Text = data.Wilayah;
-            EarthquakeCoordinates.Text = $"{data.Lintang} {data.Bujur}";
-            EarthquakePotential.Text = data.Potensi;
-            EarthquakeFelt.Text = data.Dirasakan;
-        }
-
-        private void ProcessEarthquakeData(EarthquakeInfo data)
-        {
-            double lat = MapServices.ParseCoordinate(data.Lintang);
-            double longti = MapServices.ParseCoordinate(data.Bujur, isLatitude: false);
-
-            MapServices.SetMapPosition(lat, longti, MyMap);
-            MapServices.AddEarthquakeMarker(lat, longti, MyMap);
-        }
-
-        private void UpdateLastUpdateInfo()
-        {
-            DateTime currentDateTime = DateTime.Now;
-            LastUpdate.Text = $"Informasi Terakhir: {currentDateTime:dd/MM/yyyy HH:mm:ss}";
-        }
-
-        private void CheckShakemapAvailability()
-        {
-            bool available = shakemapCode != "No Data";
-            ShakemapButton.IsEnabled = available;
-        }
-
-
-        private async void ShakeMap_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new ShakemapDialog(shakemapCode, this.XamlRoot);
-            await dialog.ShowAsync();
-
+            ViewModel.StopTimer();
         }
     }
 }
