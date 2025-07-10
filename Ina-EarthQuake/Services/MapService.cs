@@ -10,9 +10,9 @@ using System.Diagnostics;
 
 namespace Ina_EarthQuake.Services
 {
-    public static class MapServices
+    public class MapService : IMapService
     {
-        public static double ParseCoordinate(string coordinate, bool isLatitude = true)
+        public double ParseCoordinate(string coordinate, bool isLatitude = true)
         {
             string cleanedCoordinate = coordinate;
 
@@ -36,31 +36,32 @@ namespace Ina_EarthQuake.Services
                 }
                 else
                 {
-                    return result; // Longitude (Bujur) bisa positif atau negatif, sesuai dengan koordinat
+                    return result;
                 }
             }
 
-            // Jika parsing gagal, kembalikan 0
             return 0;
         }
 
-        public static void SetMapPosition(double lat, double longti, MapControl MyMap)
+        public void SetMapPosition(MapControl mapControl, double lat, double lon)
         {
-            var centerOfEarthquake = new MPoint(longti, lat);
+            var centerOfEarthquake = new MPoint(lon, lat);
             var sphericalMercatorCoordinate = SphericalMercator.FromLonLat(centerOfEarthquake.X, centerOfEarthquake.Y).ToMPoint();
 
-            MyMap.Map.Navigator.CenterOnAndZoomTo(sphericalMercatorCoordinate, MyMap.Map.Navigator.Resolutions[8]);
-            Debug.WriteLine("Zooooooom");
+            mapControl.Map.Navigator.CenterOnAndZoomTo(sphericalMercatorCoordinate, mapControl.Map.Navigator.Resolutions[9]);
 
             //MyMap.Map.Navigator.PanLock = true;
-            MyMap.Map.Navigator.RotationLock = true;
+            mapControl.Map.Navigator.RotationLock = true;
+
+            Debug.WriteLine("[MAPS] Berhasil Pindah dan Zoom Sesuai Titik");
         }
-        public static void AddEarthquakeMarker(double lat, double longti, MapControl MyMap)
+
+        public void AddEarthquakeMarker(MapControl mapControl, double lat, double lon)
         {
-            var earthquakePosition = new MPoint(longti, lat);
+            var earthquakePosition = new MPoint(lon, lat);
             var sphericalMercatorCoordinate = SphericalMercator.FromLonLat(earthquakePosition.X, earthquakePosition.Y).ToMPoint();
 
-            if (MyMap.Map.Layers.FirstOrDefault(layer => layer.Name == "GempaLayer") is not MemoryLayer gempaLayer)
+            if (mapControl.Map.Layers.FirstOrDefault(layer => layer.Name == "GempaLayer") is not MemoryLayer gempaLayer)
             {
                 gempaLayer = new MemoryLayer
                 {
@@ -68,10 +69,9 @@ namespace Ina_EarthQuake.Services
                     Features = [],
                     Style = null
                 };
-                MyMap.Map.Layers.Add(gempaLayer);
+                mapControl.Map.Layers.Add(gempaLayer);
             }
 
-            // Buat titik gempa sebagai feature
             var earthquakeFeature = new PointFeature(sphericalMercatorCoordinate)
             {
                 Styles =
@@ -86,9 +86,8 @@ namespace Ina_EarthQuake.Services
                 ]
             };
 
-            // Tambahkan ke layer
             gempaLayer.Features = [.. gempaLayer.Features, earthquakeFeature];
-            MyMap.Refresh();
+            mapControl.Refresh();
         }
     }
 }

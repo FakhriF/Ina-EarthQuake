@@ -10,7 +10,7 @@
         // Buat signature unik dari tiga properti utama
         public static string GenerateSignature(EarthquakeInfo info)
         {
-            return $"{info.Datetime}|{info.Magnitude}|{info.Wilayah}";
+            return $"{info.DateTime}|{info.Magnitude}|{info.Wilayah}";
         }
 
         // Simpan signature terakhir ke LocalSettings

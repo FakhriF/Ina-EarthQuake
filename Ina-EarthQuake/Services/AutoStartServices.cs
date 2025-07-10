@@ -2,7 +2,7 @@
 //using System;
 //using System.IO;
 
-//public static class StartupHelper
+//public static class AutoStartServices
 //{
 //    public static void EnableAutoStart(string appName)
 //    {
