@@ -32,12 +32,14 @@
             </controls:SettingsCard>
             -->
 
+            <!--
             <controls:SettingsCard Header="Aktifkan Autostart"
                                    Description="Atur aplikasi Ina-EarthQuake agar dapat dijalankan secara otomatis ketika anda baru menyalakan perangkat."
                                    HeaderIcon="{ui:FontIcon Glyph=&#xE7E8;}">
                 <ToggleSwitch x:Name="AutostartToggle" Toggled="AutostartToggle_Toggled"/>
             </controls:SettingsCard>
-
+            -->
+            
             <controls:SettingsCard Header="Notifikasi Kegempaan Terkini"
                                    Description="Notifikasi terkait informasi gempa yang baru saja terjadi."
                                    HeaderIcon="{ui:FontIcon Glyph=&#xEA8F;}">
@@ -51,13 +53,13 @@
                 <ToggleSwitch/>
             </controls:SettingsCard>
             -->
-
+            <!--
             <controls:SettingsCard Header="Jalankan Aplikasi di Belakang Layar"
                        Description="Mengizinkan aplikasi untuk berjalan di belakang layar ketika anda menutup aplikasi."
                        HeaderIcon="{ui:FontIcon Glyph=&#xEF1F;}">
                 <ToggleSwitch x:Name="BackgroundTaskToggle" Toggled="BackgroundTaskToggle_Toggled"/>
             </controls:SettingsCard>
-
+            -->
 
             <controls:SettingsCard Header="Ina-EarthQuake"
                                    Description="2025 © All Rights Reserved"

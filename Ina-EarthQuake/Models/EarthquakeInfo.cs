@@ -1,5 +1,6 @@
 ﻿
 
+using Ina_EarthQuake.Services;
 using System.Text.Json.Serialization;
 
 namespace Ina_EarthQuake.Models
@@ -13,7 +14,8 @@ namespace Ina_EarthQuake.Models
         [JsonPropertyName("Jam")]
         public string? Jam { get; set; }
         [JsonPropertyName("Magnitude")]
-        public string? Magnitude { get; set; }
+        [JsonConverter(typeof(StringToDoubleJsonConverter))]
+        public double? Magnitude { get; set; }
         [JsonPropertyName("Kedalaman")]
         public string? Kedalaman { get; set; }
         [JsonPropertyName("Wilayah")]

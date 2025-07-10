@@ -7,6 +7,7 @@ using Mapsui.UI.WinUI;
 using Mapsui.Extensions;
 using System.Linq;
 using System.Diagnostics;
+using Mapsui.Limiting;
 
 namespace Ina_EarthQuake.Services
 {
@@ -43,6 +44,11 @@ namespace Ina_EarthQuake.Services
             return 0;
         }
 
+        public void SetZoomLimits(MapControl mapControl)
+        {
+            mapControl.Map.Navigator.Limiter = new ViewportLimiterKeepWithinExtent();
+        }
+
         public void SetMapPosition(MapControl mapControl, double lat, double lon)
         {
             var centerOfEarthquake = new MPoint(lon, lat);
@@ -56,7 +62,7 @@ namespace Ina_EarthQuake.Services
             Debug.WriteLine("[MAPS] Berhasil Pindah dan Zoom Sesuai Titik");
         }
 
-        public void AddEarthquakeMarker(MapControl mapControl, double lat, double lon)
+        public void AddEarthquakeMarker(MapControl mapControl, double lat, double lon, double magnitude)
         {
             var earthquakePosition = new MPoint(lon, lat);
             var sphericalMercatorCoordinate = SphericalMercator.FromLonLat(earthquakePosition.X, earthquakePosition.Y).ToMPoint();
@@ -74,20 +80,43 @@ namespace Ina_EarthQuake.Services
 
             var earthquakeFeature = new PointFeature(sphericalMercatorCoordinate)
             {
-                Styles =
-                [
-                    new SymbolStyle
-                    {
-                        Fill = new Brush { Color = Color.Red },
-                        Outline = new Pen { Color = Color.Black, Width = 1 },
-                        SymbolScale = 0.75,
-                        SymbolType = SymbolType.Ellipse
-                    }
-                ]
+                Styles = CreateEarthquakeStyles(magnitude)
             };
 
             gempaLayer.Features = [.. gempaLayer.Features, earthquakeFeature];
             mapControl.Refresh();
+        }
+
+        private ICollection<IStyle> CreateEarthquakeStyles(double magnitude)
+        {
+            var color = magnitude < 4.0 ? new Color(255,255,0) :
+                magnitude < 6.0 ? new Color(255, 165, 0) :
+                new Color(255, 0, 0);
+
+            var scale = 0.6 + (magnitude / 10.0);
+
+            return new List<IStyle>
+            {
+                new SymbolStyle
+                {
+                    Fill = new Brush(new Color(color.R, color.G, color.B, 80)),
+                    SymbolScale = scale * 2.0,
+                    SymbolType = SymbolType.Ellipse
+                },
+                new SymbolStyle
+                {
+                    Fill = new Brush(new Color(color.R, color.G, color.B, 120)),
+                    SymbolScale = scale * 1.5,
+                    SymbolType = SymbolType.Ellipse
+                },
+                new SymbolStyle
+                {
+                    Fill = new Brush(color),
+                    Outline = new Pen(Color.Black, 1),
+                    SymbolScale = scale,
+                    SymbolType = SymbolType.Ellipse
+                }
+            };
         }
     }
 }

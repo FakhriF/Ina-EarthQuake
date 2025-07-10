@@ -48,13 +48,13 @@ namespace Ina_EarthQuake.Views
                 if (toggleSwitch.IsOn == true)
                 {
                     Debug.WriteLine("[ACTION] Notification Switch is ON");
-                    //_pollingService.Start();
+                    App.PollingService.Start();
                     ApplicationData.Current.LocalSettings.Values["NotificationsEnabled"] = true;
                 }
                 else
                 {
                     Debug.WriteLine("[ACTION] Notification Switch is OFF");
-                    //_pollingService.Stop();
+                    App.PollingService.Stop();
                     ApplicationData.Current.LocalSettings.Values["NotificationsEnabled"] = false;
                 }
             }

@@ -31,6 +31,7 @@ namespace Ina_EarthQuake.Views
             ViewModel = new EQDetailViewModel();
 
             MyMap.Map.Layers.Add(Mapsui.Tiling.OpenStreetMap.CreateTileLayer());
+            App.MapService.SetZoomLimits(MyMap);
 
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
         }
@@ -56,7 +57,7 @@ namespace Ina_EarthQuake.Views
             double lon = App.MapService.ParseCoordinate(data.Bujur, isLatitude: false);
 
             App.MapService.SetMapPosition(MyMap, lat, lon);
-            App.MapService.AddEarthquakeMarker(MyMap, lat, lon);
+            App.MapService.AddEarthquakeMarker(MyMap, lat, lon, data.Magnitude.Value);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

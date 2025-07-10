@@ -11,6 +11,8 @@ namespace Ina_EarthQuake.Services
     {
         double ParseCoordinate(string coordinate, bool isLatitude = true);
         void SetMapPosition(MapControl mapControl, double lat, double lon);
-        void AddEarthquakeMarker(MapControl mapControl, double lat, double lon);
+        void AddEarthquakeMarker(MapControl mapControl, double lat, double lon, double magnitude);
+
+        void SetZoomLimits(MapControl mapControl);
     }
 }
