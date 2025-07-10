@@ -36,11 +36,11 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="{x:Bind Magnitude}" FontSize="24" FontWeight="Bold" 
+                                <TextBlock Text="{x:Bind FormattedMagnitude}" FontSize="24" FontWeight="Bold" 
                                            HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Margin="10,0,20,0"/>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="1">
-                                    <TextBlock Text="{x:Bind Wilayah}" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{x:Bind CleanWilayahTitle}" FontSize="16" FontWeight="Bold"/>
                                     <TextBlock FontSize="12">
                                         <Run Text="{x:Bind Tanggal}"/>
                                         <Run Text="-"/>
