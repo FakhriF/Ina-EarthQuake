@@ -56,9 +56,19 @@
                         </controls:SettingsExpander.Items>
                     </controls:SettingsExpander>
                 </StackPanel>
+                <RichTextBlock
+                    Margin="0, 20, 0, 20"
+                    Style="{StaticResource BodyTextBlockStyle}"
+                    >
+                    <Paragraph>Informasi keselamatan ini diambil dari infografis yang disediakan oleh
+                        <Hyperlink NavigateUri="https://bnpb.go.id">Badan Nasional Penanggulangan Bencana Indonesia</Hyperlink>.
+                    </Paragraph>
+                </RichTextBlock>
+                <!--
                 <TextBlock Text="Informasi Keselamatan ini diambil dari infografis yang disediakan oleh Badan Nasional Penanggulangan Bencana Indonesia."
                            Margin="0,20,0,20"
                            Style="{StaticResource BodyTextBlockStyle}"/>
+                -->
             </StackPanel>
         </Grid>
      </ScrollView>

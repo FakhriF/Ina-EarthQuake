@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Page
     x:Class="Ina_EarthQuake.Views.EQDetail"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Ina_EarthQuake.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:winui="using:Mapsui.UI.WinUI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="using:Mapsui.UI.WinUI"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:models="using:Ina_EarthQuake.Models"
     mc:Ignorable="d"
     Background="{ThemeResource LayerOnAcrylicFillColorDefaultBrush}">
 
@@ -14,41 +14,30 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2.5*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <TextBlock Text="Informasi Gempa Bumi"
-                 FontSize="28"
-FontWeight="Bold"
-                 HorizontalAlignment="Left"
-                 VerticalAlignment="Top"
-                 Margin="20"/>
+                   FontSize="28" FontWeight="Bold"
+                   HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Margin="20"/>
+
         <Grid Grid.Column="0" Grid.Row="1" Margin="25" CornerRadius="20">
             <winui:MapControl x:Name="MyMap" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-            <Grid CornerRadius="20" Margin="20, 20, 20, 60" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Canvas.ZIndex="20" HorizontalAlignment="Center"
-        VerticalAlignment="Bottom">
+            <Grid CornerRadius="20" Margin="20, 20, 20, 60" Background="{ThemeResource SystemControlAcrylicWindowBrush}" Canvas.ZIndex="20" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                 <controls:WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" HorizontalSpacing="15" VerticalSpacing="15">
                     <Grid Margin="15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <FontIcon Glyph="&#xE787;" Grid.Column="0"/>
-                        <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
-                            <TextBlock
-                              Text="Tanggal"
-                              Style="{StaticResource CaptionTextBlockStyle}"
-                              HorizontalAlignment="Left"
-                              VerticalAlignment="Top"/>
-                            <TextBlock
-                              x:Name="EarthquakeDate"
-                              Text="DD MMMM YYYY"
-                              FontSize="20"
-                              FontWeight="Bold"
-                              VerticalAlignment="Top"/>
+                        <FontIcon Glyph="&#xE787;"/>
+                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                            <TextBlock Text="Tanggal" Style="{StaticResource CaptionTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind ViewModel.SelectedEarthquake.Tanggal, FallbackValue='...'}" FontSize="20" FontWeight="Bold"/>
                         </StackPanel>
                     </Grid>
                     <Grid Margin="15">
@@ -56,19 +45,10 @@ FontWeight="Bold"
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <FontIcon Glyph="&#xE823;" Grid.Column="0"/>
-                        <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
-                            <TextBlock
-          Text="Waktu"
-          Style="{StaticResource CaptionTextBlockStyle}"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Top"/>
-                            <TextBlock
-   x:Name="EarthquakeHours"
-   Text="HH:MM:SS WIB"
-   FontSize="20"
-   FontWeight="Bold"
-   VerticalAlignment="Top"/>
+                        <FontIcon Glyph="&#xE823;"/>
+                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                            <TextBlock Text="Waktu" Style="{StaticResource CaptionTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind ViewModel.SelectedEarthquake.Jam, FallbackValue='...'}" FontSize="20" FontWeight="Bold"/>
                         </StackPanel>
                     </Grid>
                     <Grid Margin="15">
@@ -76,19 +56,10 @@ FontWeight="Bold"
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <FontIcon Glyph="&#xE93E;" Grid.Column="0"/>
-                        <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
-                            <TextBlock
-     Text="Magnitudo"
-     Style="{StaticResource CaptionTextBlockStyle}"
-     HorizontalAlignment="Left"
-     VerticalAlignment="Top"/>
-                            <TextBlock
-   x:Name="EarthquakeMag"
-   Text="X.X"
-   FontSize="20"
-   FontWeight="Bold"
-   VerticalAlignment="Top"/>
+                        <FontIcon Glyph="&#xE93E;"/>
+                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                            <TextBlock Text="Magnitudo" Style="{StaticResource CaptionTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind ViewModel.SelectedEarthquake.Magnitude, FallbackValue='...'}" FontSize="20" FontWeight="Bold"/>
                         </StackPanel>
                     </Grid>
                     <Grid Margin="15">
@@ -96,35 +67,27 @@ FontWeight="Bold"
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <FontIcon Glyph="&#xED5E;" Grid.Column="0"/>
-                        <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
-                            <TextBlock
-Text="Kedalaman"
-Style="{StaticResource CaptionTextBlockStyle}"
-HorizontalAlignment="Left"
-VerticalAlignment="Top"/>
-                            <TextBlock
-   x:Name="EarthquakeDepth"
-   Text="YY km"
-   FontSize="20"
-   FontWeight="Bold"
-   VerticalAlignment="Top"/>
+                        <FontIcon Glyph="&#xED5E;"/>
+                        <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                            <TextBlock Text="Kedalaman" Style="{StaticResource CaptionTextBlockStyle}"/>
+                            <TextBlock Text="{x:Bind ViewModel.SelectedEarthquake.Kedalaman, FallbackValue='...'}" FontSize="20" FontWeight="Bold"/>
                         </StackPanel>
                     </Grid>
                 </controls:WrapPanel>
             </Grid>
         </Grid>
-        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+
+        <StackPanel Grid.Column="1" Grid.Row="1">
             <TextBlock Text="Informasi Detail" Margin="10" FontWeight="Bold" FontSize="24"/>
             <Grid Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <FontIcon Glyph="&#xE707;" Grid.Column="0" />
-                <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
+                <FontIcon Glyph="&#xE707;"/>
+                <StackPanel Grid.Column="1" Margin="20,0,0,0">
                     <TextBlock Text="Titik Koordinat" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    <TextBlock x:Name="EarthquakeCoordinates" Text="XX.XX LU XX.XX BT"  FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                    <TextBlock Text="{x:Bind ViewModel.Coordinates, Mode=OneWay, FallbackValue='...'}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="10">
@@ -132,10 +95,10 @@ VerticalAlignment="Top"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <FontIcon Glyph="&#xEB44;" Grid.Column="0" />
-                <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
+                <FontIcon Glyph="&#xEB44;"/>
+                <StackPanel Grid.Column="1" Margin="20,0,0,0">
                     <TextBlock Text="Dirasakan" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    <TextBlock x:Name="EarthquakeFelt" Text="III XYZ, IV ASA"  FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedEarthquake.Dirasakan, FallbackValue='...'}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="10">
@@ -143,10 +106,10 @@ VerticalAlignment="Top"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <FontIcon Glyph="&#xE7B7;" Grid.Column="0"/>
-                <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
+                <FontIcon Glyph="&#xE7B7;"/>
+                <StackPanel Grid.Column="1" Margin="20,0,0,0">
                     <TextBlock Text="Wilayah" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    <TextBlock x:Name="EarthquakeRegion" Text="XX KM ASADF"  FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                    <TextBlock Text="{x:Bind ViewModel.SelectedEarthquake.Wilayah, FallbackValue='...'}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="10">
@@ -154,10 +117,10 @@ VerticalAlignment="Top"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <FontIcon Glyph="&#xE946;" Grid.Column="0"/>
-                <StackPanel Orientation="Vertical" Margin="20,0,20,0" Grid.Column="1">
+                <FontIcon Glyph="&#xE946;"/>
+                <StackPanel Grid.Column="1" Margin="20,0,0,0">
                     <TextBlock Text="Sumber Informasi" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    <TextBlock Text="Open Data BMKG"  FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                    <TextBlock Text="Open Data BMKG" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
         </StackPanel>

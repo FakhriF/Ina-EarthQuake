@@ -25,10 +25,9 @@ namespace Ina_EarthQuake.Views
         {
             this.InitializeComponent();
 
-            var earthquakeService = new EarthquakeService();
             var navigationService = new NavigationService();
 
-            ViewModel = new EQHistoryViewModel(earthquakeService, navigationService);
+            ViewModel = new EQHistoryViewModel(navigationService);
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

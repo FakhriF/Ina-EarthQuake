@@ -15,7 +15,7 @@ namespace Ina_EarthQuake.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        private readonly EarthquakePollingService _pollingService = new();
+        //private readonly EarthquakePollingService _pollingService = new();
 
         public SettingsPage()
         {
@@ -47,14 +47,14 @@ namespace Ina_EarthQuake.Views
             {
                 if (toggleSwitch.IsOn == true)
                 {
-                    Debug.WriteLine("Notification Switch is ON");
-                    _pollingService.Start();
+                    Debug.WriteLine("[ACTION] Notification Switch is ON");
+                    //_pollingService.Start();
                     ApplicationData.Current.LocalSettings.Values["NotificationsEnabled"] = true;
                 }
                 else
                 {
-                    Debug.WriteLine("Notification Switch is OFF");
-                    _pollingService.Stop();
+                    Debug.WriteLine("[ACTION] Notification Switch is OFF");
+                    //_pollingService.Stop();
                     ApplicationData.Current.LocalSettings.Values["NotificationsEnabled"] = false;
                 }
             }
@@ -62,21 +62,38 @@ namespace Ina_EarthQuake.Views
 
         private void AutostartToggle_Toggled(object sender, RoutedEventArgs e)
         {
-            //ToggleSwitch? toggleSwitch = sender as ToggleSwitch;
+            ToggleSwitch? toggleSwitch = sender as ToggleSwitch;
 
-            //if (toggleSwitch != null)
-            //{
-            //    if (toggleSwitch.IsOn == true)
-            //    {
-            //        Debug.WriteLine("Autostart Switch is ON");
-            //        StartupHelper.EnableAutoStart("Ina-EarthQuake");
-            //    }
-            //    else
-            //    {
-            //        Debug.WriteLine("Autostart Switch is OFF");
-            //        StartupHelper.DisableAutoStart("Ina-EarthQuake");
-            //    }
-            //}
+            if (toggleSwitch != null)
+            {
+                if (toggleSwitch.IsOn == true)
+                {
+                    Debug.WriteLine("[ACTION] Autostart Switch is ON");
+                    //StartupHelper.EnableAutoStart("Ina-EarthQuake");
+                }
+                else
+                {
+                    Debug.WriteLine("[ACTION] Autostart Switch is OFF");
+                    //StartupHelper.DisableAutoStart("Ina-EarthQuake");
+                }
+            }
+        }
+
+        private void BackgroundTaskToggle_Toggled(object sender, RoutedEventArgs e)
+        {
+            ToggleSwitch? toggleSwitch = sender as ToggleSwitch;
+
+            if (toggleSwitch != null)
+            {
+                if (toggleSwitch.IsOn == true)
+                {
+                    Debug.WriteLine("[ACTION] Background Task is ON");
+                }
+                else
+                {
+                    Debug.WriteLine("[ACTION] Background Task is OFF");
+                }
+            }
         }
     }
 }

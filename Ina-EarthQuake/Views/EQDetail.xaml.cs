@@ -8,6 +8,8 @@ using Mapsui.Extensions;
 using Ina_EarthQuake.Models;
 using System.Diagnostics;
 using Ina_EarthQuake.Services;
+using Ina_EarthQuake.ViewModels;
+using System.ComponentModel;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -20,11 +22,41 @@ namespace Ina_EarthQuake.Views
     /// </summary>
     public sealed partial class EQDetail : Page
     {
+        public EQDetailViewModel ViewModel { get; set; }
+
         public EQDetail()
         {
             this.InitializeComponent();
 
-            MyMap.Map.Layers.Add(OpenStreetMap.CreateTileLayer());
+            ViewModel = new EQDetailViewModel();
+
+            MyMap.Map.Layers.Add(Mapsui.Tiling.OpenStreetMap.CreateTileLayer());
+
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ViewModel.SelectedEarthquake))
+            {
+                DispatcherQueue.TryEnqueue(async () =>
+                {
+                    await Task.Delay(100);
+                    UpdateMapPosition();
+                });
+            }
+        }
+
+        private void UpdateMapPosition()
+        {
+            var data = ViewModel.SelectedEarthquake;
+            if (data == null) return;
+
+            double lat = App.MapService.ParseCoordinate(data.Lintang);
+            double lon = App.MapService.ParseCoordinate(data.Bujur, isLatitude: false);
+
+            App.MapService.SetMapPosition(MyMap, lat, lon);
+            App.MapService.AddEarthquakeMarker(MyMap, lat, lon);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -33,65 +65,18 @@ namespace Ina_EarthQuake.Views
 
             if (e.Parameter is EarthquakeInfo eq)
             {
-                Debug.WriteLine($"Navigated to detail: {eq.Tanggal} - Magnitude {eq.Magnitude}");
-                this.DataContext = eq;
-                UpdateUI(eq); // Pastikan eq tidak null sebelum dipakai
+                ViewModel.Initialize(eq);
             }
             else
             {
-                Debug.WriteLine("Data gempa tidak ditemukan atau tidak sesuai.");
+                Debug.WriteLine("[ERROR] Data gempa tidak ditemukan atau tidak sesuai.");
             }
         }
-
-        private Task UpdateUI(EarthquakeInfo eq)
-        {
-            if (eq != null)
-            {
-                UpdateEarthquakeDetails(eq);
-            }
-            else
-            {
-                EarthquakeDate.Text = "Error: Unable to fetch data.";
-            }
-
-            if (eq != null)
-            {
-                double lat = MapServices.ParseCoordinate(eq.Lintang);
-                double longti = MapServices.ParseCoordinate(eq.Bujur, isLatitude: false);
-
-                SetMapPosition(lat, longti);
-                MapServices.AddEarthquakeMarker(lat, longti, MyMap);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        private void UpdateEarthquakeDetails(EarthquakeInfo data)
-        {
-            EarthquakeDate.Text = data.Tanggal;
-            EarthquakeHours.Text = data.Jam;
-            EarthquakeMag.Text = data.Magnitude;
-            EarthquakeDepth.Text = data.Kedalaman;
-            EarthquakeRegion.Text = data.Wilayah;
-            EarthquakeCoordinates.Text = $"{data.Lintang} {data.Bujur}";
-            EarthquakeFelt.Text = data.Dirasakan;
-        }
-
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            base.OnNavigatedFrom(e);
             MyMap.Map.Layers.Clear();
-        }
-
-        private void SetMapPosition(double lat, double longti)
-        {
-            var centerOfEarthquake = new MPoint(longti, lat);
-            var sphericalMercatorCoordinate = SphericalMercator.FromLonLat(centerOfEarthquake.X, centerOfEarthquake.Y).ToMPoint();
-
-            MyMap.Map.Navigator.CenterOnAndZoomTo(sphericalMercatorCoordinate, MyMap.Map.Navigator.Resolutions[10]);
-
-            MyMap.Map.Navigator.PanLock = true;
-            MyMap.Map.Navigator.RotationLock = true;
         }
     }
 }

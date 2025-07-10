@@ -13,19 +13,11 @@
         x:Name="TrayIcon"
         x:FieldModifier="public"
         ContextMenuMode="SecondWindow"
+        IconSource="/Assets/icon.ico"
         LeftClickCommand="{x:Bind ShowHideWindowCommand}"
         NoLeftClickDelay="True"
         ToolTipText="Ina-EarthQuake"
         >
-            <tb:TaskbarIcon.IconSource>
-            <tb:GeneratedIconSource
-            Text=" Q"
-            Foreground="Red"
-            Background="AliceBlue"
-            FontWeight="Bold"
-            FontSize="70"
-            />
-        </tb:TaskbarIcon.IconSource>
         <tb:TaskbarIcon.ContextFlyout>
             <MenuFlyout AreOpenCloseAnimationsEnabled="False">
                 <MenuFlyoutItem

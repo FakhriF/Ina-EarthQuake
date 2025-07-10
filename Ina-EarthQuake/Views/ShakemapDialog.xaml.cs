@@ -13,16 +13,13 @@ namespace Ina_EarthQuake.Views
     /// </summary>
     public sealed partial class ShakemapDialog : ContentDialog
     {
-        public ShakemapDialog(string shakemapCode, XamlRoot xamlRoot)
+        public string ShakemapImageUrl { get; }
+
+        public ShakemapDialog(string shakemapCode)
         {
             this.InitializeComponent();
 
-            // Set XamlRoot agar dialog bisa muncul
-            this.XamlRoot = xamlRoot;
-
-            // Set gambar berdasarkan kode shakemap dari API
-            string imageUrl = $"https://static.bmkg.go.id/{shakemapCode}";
-            ShakemapImage.Source = new BitmapImage(new Uri(imageUrl));
+            ShakemapImageUrl = $"https://data.bmkg.go.id/DataMKG/TEWS/{shakemapCode}";
         }
     }
 }

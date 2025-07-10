@@ -12,6 +12,7 @@
     PrimaryButtonText="Tutup"
     IsSecondaryButtonEnabled="False">
     <Grid>
-        <Image x:Name="ShakemapImage" Stretch="Uniform"/>
+        <ProgressRing IsActive="True" Width="50" Height="50"/>
+        <Image Source="{x:Bind ShakemapImageUrl, Mode=OneWay}" Stretch="Uniform"/>
     </Grid>
 </ContentDialog>

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Ina_EarthQuake.Models;
 using Ina_EarthQuake.Services;
+using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,11 +22,16 @@ namespace Ina_EarthQuake.ViewModels
         private ObservableCollection<EarthquakeInfo> _earthquakeList = new();
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ContentVisibility))]
+        [NotifyPropertyChangedFor(nameof(LoadingVisibility))]
         private bool _isLoading = false;
 
-        public EQHistoryViewModel(EarthquakeService earthquakeService, INavigationService navigationService)
+        public Visibility ContentVisibility => IsLoading ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility LoadingVisibility => IsLoading ? Visibility.Visible : Visibility.Collapsed;
+
+        public EQHistoryViewModel(INavigationService navigationService)
         {
-            _earthquakeService = earthquakeService;
+            _earthquakeService = App.EarthquakeService;
             _navigationService = navigationService;
         }
 
