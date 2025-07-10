@@ -35,7 +35,15 @@ namespace Ina_EarthQuake
     /// </summary>
     public partial class App : Application
     {
-        private readonly EarthquakePollingService _pollingService = new();
+        public static EarthquakeService EarthquakeService { get; private set; }
+        public static INotificationService NotificationService { get; private set; }
+        public static EarthquakePollingService PollingService { get; private set; }
+        public static UpdateService UpdateService { get; private set; }
+        public static IDialogService DialogService { get; private set; }
+        public static IMapService MapService { get; private set; }
+
+
+
         public static DispatcherQueue? DispatcherQueue { get; private set; }
         public static bool HandleClosedEvents { get; set; } = true;
         public static Window? m_window;
@@ -51,11 +59,25 @@ namespace Ina_EarthQuake
             if (!EnsureSingleInstance())
                 return;
 
+            InitializeServices();
+
             InitializeMainWindow();
             InitializeNotifications();
             InitializeDispatcher();
-            CheckForUpdates();
+            CheckForUpdates(); 
+            
             InitializePollingService();
+        }
+
+        private void InitializeServices()
+        {
+            EarthquakeService = new EarthquakeService();
+            NotificationService = new NotificationService();
+            DialogService = new DialogService();
+            MapService = new MapService();
+            UpdateService = new UpdateService();
+
+            PollingService = new EarthquakePollingService(EarthquakeService, NotificationService);
         }
 
         private static bool EnsureSingleInstance()
@@ -87,16 +109,27 @@ namespace Ina_EarthQuake
             DispatcherQueue = m_window.DispatcherQueue;
         }
 
-        private static void CheckForUpdates()
+        private async void CheckForUpdates()
         {
-            _ = Task.Run(async () =>
+            var updateInfo = await App.UpdateService.GetUpdateInfoIfAvailableAsync();
+            if (updateInfo != null)
             {
-                await Task.Delay(500); // Wait for UI to be ready
-                await m_window.DispatcherQueue.EnqueueAsync(async () =>
+                bool agreeToUpdate = await App.DialogService.ShowConfirmationDialogAsync(
+                    title: $"Versi baru tersedia: {updateInfo.Version}",
+                    message: $"Changelog:\n{updateInfo.Changelog}\n\nApakah Anda ingin mengunduh dan menginstal pembaruan?",
+                    primaryButtonText: "Update Sekarang",
+                    secondaryButtonText: "Nanti Saja");
+
+                if (agreeToUpdate)
                 {
-                    await UpdateChecker.CheckForUpdateAsync();
-                });
-            });
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = updateInfo.Url,
+                        UseShellExecute = true
+                    });
+                    Environment.Exit(0);
+                }
+            }
         }
 
         private void InitializePollingService()
@@ -104,7 +137,7 @@ namespace Ina_EarthQuake
             if (IsNotificationsEnabled())
             {
                 Debug.WriteLine("Notification set to ON | Pooling Service ON");
-                _pollingService.Start();
+                App.PollingService.Start();
             }
         }
 

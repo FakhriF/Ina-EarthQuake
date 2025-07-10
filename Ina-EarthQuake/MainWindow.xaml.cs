@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Ina_EarthQuake.Views;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -61,54 +62,28 @@ namespace Ina_EarthQuake
         {
             Nav.ItemInvoked += Nav_ItemInvoked;
             Nav.BackRequested += Nav_BackRequested;
-
             MainFrame.Navigated += MainFrame_Navigated;
 
-            var homeItem = Nav.MenuItems
-                .OfType<NavigationViewItem>()
-                .FirstOrDefault(item => (string)item.Content == "Beranda");
-
-            if (homeItem != null)
-            {
-                Nav.SelectedItem = homeItem;
-                MainFrame.Navigate(typeof(HomePage));
-            }
-
-            Nav.IsBackEnabled = MainFrame.CanGoBack;
+            MainFrame.Navigate(typeof(Views.HomePage));
         }
 
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            // Aktifkan tombol back hanya jika sedang di halaman detail
-            if (e.SourcePageType == typeof(EQDetail))
-            {
-                Nav.IsBackEnabled = true;
-            }
-            else
-            {
-                Nav.IsBackEnabled = false;
-            }
+            Nav.IsBackEnabled = MainFrame.CanGoBack;
 
-            // Optional: update selected nav item agar tetap sinkron
             UpdateSelectedNavItem(e.SourcePageType);
         }
 
         private void UpdateSelectedNavItem(Type currentPageType)
         {
-            if (currentPageType == typeof(HomePage))
-                Nav.SelectedItem = Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Content == "Beranda");
-            else if (currentPageType == typeof(EQHistoryPage))
-                Nav.SelectedItem = Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Content == "Riwayat Gempa");
-            else if (currentPageType == typeof(SafetyInfoPage))
-                Nav.SelectedItem = Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Content == "Informasi Keselamatan");
-            else if (currentPageType == typeof(GlossaryPage))
-                Nav.SelectedItem = Nav.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Content == "Glosarium");
-            else
-                Nav.SelectedItem = null; // Untuk subpage (misalnya EQDetail)
+            var selectedItem = Nav.MenuItems
+                .OfType<NavigationViewItem>()
+                .FirstOrDefault(item => item.Tag is string tagString && Type.GetType(tagString) == currentPageType);
+
+            //await Task.Delay(50);
+
+            Nav.SelectedItem = selectedItem;
         }
-
-
-
 
         private void Nav_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
@@ -120,28 +95,25 @@ namespace Ina_EarthQuake
 
         private void Nav_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (args.InvokedItem is string selectedItem)
+            if (args.IsSettingsInvoked)
             {
-                switch (selectedItem)
+                MainFrame.Navigate(typeof(SettingsPage));
+                return;
+            }
+            
+            if (args.InvokedItemContainer?.Tag is string pageTag)
+            {
+                var pageType = Type.GetType(pageTag);
+
+                if (pageType != null)
                 {
-                    case "Beranda":
-                        MainFrame.Navigate(typeof(HomePage));
-                        break;
-                    case "Riwayat Gempa":
-                        MainFrame.Navigate(typeof(EQHistoryPage));
-                        break;
-                    case "Informasi Keselamatan":
-                        MainFrame.Navigate(typeof(SafetyInfoPage));
-                        break;
-                    case "Glosarium":
-                        MainFrame.Navigate(typeof(GlossaryPage));
-                        break;
-                    case "Settings":
-                        MainFrame.Navigate(typeof(SettingsPage));
-                        break;
+                    MainFrame.Navigate(pageType);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ERROR] Tipe halaman '{pageTag}' tidak ditemukan.");
                 }
             }
-            GC.Collect();
         }
 
         public void BringToFront()

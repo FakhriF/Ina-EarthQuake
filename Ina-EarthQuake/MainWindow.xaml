@@ -7,7 +7,6 @@
     xmlns:views="using:Ina_EarthQuake.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:tb="using:H.NotifyIcon"
     mc:Ignorable="d"
     Title="Ina-EarthQuake">
 
@@ -30,23 +29,25 @@
                            Margin="10,0,0,0"/>
             </StackPanel>
         </Grid>
+        
         <NavigationView x:Name="Nav" Grid.Row="1" CompactModeThresholdWidth="0" BackRequested="Nav_BackRequested">
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Home" Content="Beranda"/>
-                <NavigationViewItem Content="Riwayat Gempa">
+                <NavigationViewItem Icon="Home" Content="Beranda" Tag="Ina_EarthQuake.Views.HomePage"/>
+                <NavigationViewItem Content="Riwayat Gempa" Tag="Ina_EarthQuake.Views.EQHistoryPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xF168;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Informasi Keselamatan">
+                <NavigationViewItem Content="Informasi Keselamatan" Tag="Ina_EarthQuake.Views.SafetyInfoPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BE;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="Globe" Content="Glosarium"/>
+                <NavigationViewItem Icon="Globe" Content="Glosarium" Tag="Ina_EarthQuake.Views.GlossaryPage"/>
             </NavigationView.MenuItems>
-            <Frame x:Name="MainFrame" Grid.Row="1"/>
+            <Frame x:Name="MainFrame" x:FieldModifier="internal" Grid.Row="1"/>
         </NavigationView>
-        <views:TrayIconView x:Name="TrayIconView" />
+        
+        <views:TrayIconView x:Name="TrayIconView"/>
     </Grid>
 </Window>
