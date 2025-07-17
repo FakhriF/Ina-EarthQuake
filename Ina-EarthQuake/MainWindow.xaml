@@ -29,21 +29,33 @@
                            Margin="10,0,0,0"/>
             </StackPanel>
         </Grid>
-        
-        <NavigationView x:Name="Nav" Grid.Row="1" CompactModeThresholdWidth="0" BackRequested="Nav_BackRequested">
+
+        <NavigationView x:Name="Nav" Grid.Row="1" CompactModeThresholdWidth="0" BackRequested="Nav_BackRequested" PaneDisplayMode="LeftCompact">
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Home" Content="Beranda" Tag="Ina_EarthQuake.Views.HomePage"/>
-                <NavigationViewItem Content="Riwayat Gempa" Tag="Ina_EarthQuake.Views.EQHistoryPage">
+                <NavigationViewItem Icon="Home" ToolTipService.ToolTip="Beranda" Content="Beranda" Tag="Ina_EarthQuake.Views.HomePage"/>
+                <NavigationViewItem Content="Riwayat Gempa" ToolTipService.ToolTip="Riwayat Gempa" SelectsOnInvoked="False">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xF168;" />
                     </NavigationViewItem.Icon>
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Gempa Yang Dirasakan" Tag="Ina_EarthQuake.Views.FeltEQHistory">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE81D;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                        <NavigationViewItem Content="Gempa Magnitudo 5.0+" Tag="Ina_EarthQuake.Views.RecentEQHistory">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xF61F;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                    </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
-                <NavigationViewItem Content="Informasi Keselamatan" Tag="Ina_EarthQuake.Views.SafetyInfoPage">
+                <NavigationViewItem Content="Informasi Keselamatan" ToolTipService.ToolTip="Informasi Keselamatan" Tag="Ina_EarthQuake.Views.SafetyInfoPage">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BE;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="Globe" Content="Glosarium" Tag="Ina_EarthQuake.Views.GlossaryPage"/>
+                <NavigationViewItem Icon="Globe" Content="Glosarium" ToolTipService.ToolTip="Glosarium" Tag="Ina_EarthQuake.Views.GlossaryPage"/>
             </NavigationView.MenuItems>
             <Frame x:Name="MainFrame" x:FieldModifier="internal" Grid.Row="1"/>
         </NavigationView>

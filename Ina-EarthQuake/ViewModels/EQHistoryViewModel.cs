@@ -17,6 +17,7 @@ namespace Ina_EarthQuake.ViewModels
     {
         private readonly EarthquakeService _earthquakeService;
         private readonly INavigationService _navigationService;
+        private readonly string _typeEarthquake;
 
         [ObservableProperty]
         private ObservableCollection<EarthquakeInfo> _earthquakeList = new();
@@ -26,13 +27,15 @@ namespace Ina_EarthQuake.ViewModels
         [NotifyPropertyChangedFor(nameof(LoadingVisibility))]
         private bool _isLoading = false;
 
+
         public Visibility ContentVisibility => IsLoading ? Visibility.Collapsed : Visibility.Visible;
         public Visibility LoadingVisibility => IsLoading ? Visibility.Visible : Visibility.Collapsed;
 
-        public EQHistoryViewModel(INavigationService navigationService)
+        public EQHistoryViewModel(INavigationService navigationService, string typeEarthquake)
         {
             _earthquakeService = App.EarthquakeService;
             _navigationService = navigationService;
+            _typeEarthquake = typeEarthquake;
         }
 
         [RelayCommand]
@@ -43,7 +46,7 @@ namespace Ina_EarthQuake.ViewModels
             IsLoading = true;
             EarthquakeList.Clear();
 
-            var earthquakeData = await _earthquakeService.FetchEarthquakeHistoryAsync();
+            var earthquakeData = _typeEarthquake == "Felt" ? await _earthquakeService.FetchFeltEarthquake() : await _earthquakeService.FetchRecentEarthquake() ;
             if (earthquakeData != null)
             {
                 foreach (var item in earthquakeData)

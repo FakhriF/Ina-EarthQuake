@@ -17,17 +17,17 @@ namespace Ina_EarthQuake.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class EQHistoryPage : Page
+    public sealed partial class RecentEQHistory : Page
     {
         public EQHistoryViewModel ViewModel { get; }
 
-        public EQHistoryPage()
+        public RecentEQHistory()
         {
             this.InitializeComponent();
 
             var navigationService = new NavigationService();
 
-            ViewModel = new EQHistoryViewModel(navigationService);
+            ViewModel = new EQHistoryViewModel(navigationService, "Recent");
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

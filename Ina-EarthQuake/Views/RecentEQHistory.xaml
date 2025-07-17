@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Page
-    x:Class="Ina_EarthQuake.Views.EQHistoryPage"
+    x:Class="Ina_EarthQuake.Views.RecentEQHistory"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Ina_EarthQuake.Views"
@@ -21,8 +21,8 @@
 
             <StackPanel Margin="24" MaxWidth="1000" Visibility="{x:Bind ViewModel.ContentVisibility, Mode=OneWay}">
                 <StackPanel Margin="0,20,0,20">
-                    <TextBlock Text="Riwayat Gempa" Style="{StaticResource TitleTextBlockStyle}" />
-                    <TextBlock Text="Menampilkan beberapa gempa terakhir dari data BMKG." Style="{StaticResource CaptionTextBlockStyle}"/>
+                    <TextBlock Text="Riwayat Gempa Dengan Magnitudo 5.0+" Style="{StaticResource TitleTextBlockStyle}" />
+                    <TextBlock Text="Menampilkan beberapa gempa dengan magnitudo 5.0+ terakhir dari data BMKG." Style="{StaticResource CaptionTextBlockStyle}"/>
                 </StackPanel>
 
                 <ListView ItemsSource="{x:Bind ViewModel.EarthquakeList, Mode=OneWay}"
