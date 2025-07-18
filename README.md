@@ -2,7 +2,8 @@
 
 Aplikasi Windows berbasis WinUI3 untuk memberikan informasi terkini tentang gempa bumi di Indonesia.
 
-![image](https://github.com/user-attachments/assets/fa1e009e-f36b-4aa7-8aa2-5433990cee5d)
+<img width="1426" height="746" alt="image" src="https://github.com/user-attachments/assets/a680f713-2417-4e61-9a40-3317c14761fe" />
+
 
 # 📌 Fitur Utama
 
